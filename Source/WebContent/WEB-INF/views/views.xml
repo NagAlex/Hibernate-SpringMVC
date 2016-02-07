@@ -1,0 +1,36 @@
+<!DOCTYPE tiles-definitions PUBLIC 
+		"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+		"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">		
+<tiles-definitions>
+ 	<definition name="template"
+				template="/WEB-INF/views/main_template.jsp"> 	<!-- Общий шаблон -->
+				<!-- template="/WEB-INF/views/home.jsp"> -->
+		<put-attribute name="top" value="/WEB-INF/views/tiles/top.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles/signinsignup.jsp" />
+	</definition>
+
+ 	<definition name="initpage_page" extends="template">				<!-- Шаблон главной страницы -->
+ 		<put-attribute name="content" value="/WEB-INF/views/initpage.jsp"/>
+ 	</definition>
+ 	
+ 	<definition name="home" extends="template"> 				
+		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
+	</definition>
+	
+	<definition name="groups/list" extends="template">
+ 		<put-attribute name="content" value="/WEB-INF/views/groups/list.jsp"/> 
+	</definition>
+	
+	<definition name="groups/edit" extends="template"> 
+		<put-attribute name="content" value="/WEB-INF/views/groups/edit.jsp"/>
+	</definition>
+	
+	<definition name="users/edit" extends="template"> 
+		<put-attribute name="content" value="/WEB-INF/views/users/useredit.jsp"/>
+	</definition>
+	
+	
+<!-- 	<definition name="good" template="/WEB-INF/index.jsp">
+	</definition>
+	 -->
+</tiles-definitions>

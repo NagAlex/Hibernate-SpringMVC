@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	     http://www.springframework.org/schema/beans/spring-beans.xsd
+	     http://www.springframework.org/schema/context
+	     http://www.springframework.org/schema/context/spring-context.xsd
+	     http://www.springframework.org/schema/aop
+	     http://www.springframework.org/schema/aop/spring-aop.xsd
+	     http://www.springframework.org/schema/tx
+	     http://www.springframework.org/schema/tx/spring-tx.xsd
+	     http://www.springframework.org/schema/mvc
+	     http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+	<mvc:resources mapping="/resources/**" 
+				   location="/resources/" />
+	<mvc:annotation-driven />
+	<tx:annotation-driven/>
+	<context:component-scan base-package="org.nag"/>
+	<context:property-placeholder location="classpath:hibernate.properties"/>
+	
+<!-- 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+ -->	
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" />
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/views/**/views.xml</value>
+			</list>
+		</property>
+	</bean>
+ 	
+ 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jbdc.driverClassName}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<!-- pooling configuration -->
+		<property name="initialSize" value="2"/>
+		<property name="maxActive" value="5"/>
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="packagesToScan" value="org.nag.model"/>
+		<property name="hibernateProperties">	
+			<props>
+				<prop key="dialect">${hibernate.dialect}</prop>
+				<prop key="hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="show_sql">${hibernate.show_sql}</prop>
+			</props>
+		</property>
+		
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+
+	<bean id="persistenceExceptionTranslationPostProcessor" 
+		  class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+		  
+	<bean id="multipartResolver" 
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		  p:maxUploadSize="524288" />	  
+	
+</beans>
